@@ -1,4 +1,5 @@
 from turtle import Turtle, Screen
+import random
 
 class TurtleRace():
     def __init__(self):
@@ -16,21 +17,34 @@ class TurtleRace():
     def starting_position(self):
         """Moves all the turtles to the starting position"""
         self.create_turtles()
-        y_axis = [150,100,50,-50,-100,-150]
+        y_axis = [75,45,15,-15,-45,-75]
         for turtle_no,turtle in self.turtles.items():
             turtle.up()
             turtle.goto(x=-230,y=y_axis[turtle_no])
             turtle.down()
             
-
     def start_race(self):
         """Creates the screen, asks for the bet and starts the race"""
         my_screen = Screen()
         my_screen.setup(width=500,height=400)
         user_bet = my_screen.textinput(title="Make your Bet",prompt=f"Which turtle will win the race? Enter a color({self.colors}): ")
         self.starting_position()
-        my_screen.exitonclick()
+        if user_bet:
+            race_is_on = True
+        winner = ""
+        while race_is_on:
+            for turtle_no,turtle in self.turtles.items():
+                move = random.randint(0,10)
+                turtle.forward(move)
+                if turtle.xcor() >230:
+                    race_is_on = False
+                    winner = turtle_no
         
+        if user_bet == self.colors[winner]:
+            print(f"Conratulations, your {self.colors[winner]} turtle has won the race")
+        else:
+            print(f"You lose. The {self.colors[winner]} turtle won the race")
+        my_screen.exitonclick()
 
 if __name__ == "__main__":
     race = TurtleRace()
